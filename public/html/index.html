@@ -15,6 +15,25 @@
   <script src="../js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
 
+  <!-- Handlebars Template -->
+<script id="categories-template" type="text/x-handlebars-template">
+
+  {{#each categories}}
+    <article>
+      <header>
+        <a href="Category.html?id={{this.id}}"><img src="https://wiki-ads.onrender.com/{{this.img_url}}" alt="{{this.title}} picture"></a>
+        <h1>{{this.title}}</h1>
+      </header>
+      <ul>
+        {{#each this.Subcategories}}
+          <li><a href="Subcategory.hmtl?id={{this.id}}">{{this.title}}</a></li>
+        {{/each}}
+      </ul>
+    </article>
+  {{/each}}
+
+</script>
+
 </head>
 
 <body>
@@ -74,10 +93,12 @@
   <main>
 
 
-    <section class="categories-articles">
+    <section id="categories-articles"class="categories-articles">
+    <!--
       <article>
         <header>
           <img src="../png/Categories-logos/RealEstate.png" alt="Small house picture">
+          https://wiki-ads.onrender.com/static/images/home-category.PNG
           <h1>Ακίνητα</h1>
         </header>
         <ul>
@@ -160,7 +181,7 @@
         </ul>
       </article>
 
-
+    -->
     </section>
   </main>
 
