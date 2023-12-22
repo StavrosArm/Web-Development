@@ -17,8 +17,37 @@
 
    <!-- Handlebars Template -->
   <script id="adsOfSelectedSubCategory-template" type="text/x-handlebars-template">
-    
-  </script>
+        <h2>{{HeadingStr}}</h2>
+        {{#each ads}} 
+          <article>
+            <header>
+              <h1>{{this.title}}</h1>
+              {{#each this.images}}
+              <img src="https://wiki-ads.onrender.com/{{this}}" alt="{{../title}}">
+              {{/each}}
+            </header>
+            <h2>Σύντομή περιγραφή</h2>
+            <p>{{this.description}}</p>
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2">Xαρακτηριστικά Αγγελίας</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this.features}}
+                <tr>
+                    <td>{{@key}}</td>
+                    <td>{{this}}</td> 
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <span>Αρχική τιμή : {{this.cost}} € </span>
+          </article>
+        {{/each}}
+      
+    </script>
 
 </head>
 

@@ -126,15 +126,32 @@ function handleSubcategoryResult(subcategoryAds,err){
         //Εμφάνιση των subcategoryAds αντικειμένου για debugging
         
         console.log(subcategoryAds)
+        console.log(subcategoryAds.features)
 
         let articlesTemplateScript = document.getElementById('adsOfSelectedSubCategory-template').textContent;
         window.templates = {};
         window.templates.articlesSection = Handlebars.compile(articlesTemplateScript);
 
         let articlesSection = document.getElementById("subcategory-ads-articles");
+        
+        //Τα feature δίνονται ως strings. Τα κόβουμε όπου δούμε ερωτηματικό
+        //Και δημιουργούμε ένα νέο αντικείμενο για κάθε αγγελία 
+        subcategoryAds.forEach(function(subcategoryAds) {
+            let featureArray = subcategoryAds.features.split(';');
+            let featuresObject = {};
+            featureArray.forEach(function(feature) {
+              let keyValue = feature.split(':');
+              let key = keyValue[0].trim();
+              let value = keyValue[1] ? keyValue[1].trim() : '-';
+              featuresObject[key] = value;
+            });
+            subcategoryAds.features = featuresObject;
+          });
 
         let sectionHtmlContent =templates.articlesSection({
             //Εδώ βάζουμε ΄τα ορίσματα για το handlebar
+            ads:subcategoryAds,
+            HeadingStr:'Aποτελέσματα αναζήτησης: '
         });
         articlesSection.innerHTML = sectionHtmlContent;
     }else{
@@ -154,7 +171,7 @@ function init(){
     urlString = window.location.href;
     console.log("Url : "+ urlString)
 
-    // αρχικοποιήση μιας μεταωβλητης που δέχεται τα query parameteres
+    // αρχικοποιήση μιας μεταβλητης που δέχεται τα query parameteres
     queryString = window.location.search;
     
      // χρησιμοποιούμε την URLSearchParams με σκοπό να μπορούμε να χρησιμοποιήσουμε τα params

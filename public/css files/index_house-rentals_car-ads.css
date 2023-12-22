@@ -13,6 +13,55 @@
   flex-direction: column;
 }
 
+.ads-articles p{
+  margin:1em; 
+  display:flex;
+  flex-direction: column;
+}
+
+#subcategory-ads-articles header{
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  height:300px;
+}
+
+#subcategory-ads-articles h1{
+  grid-column: 1/5;
+}
+
+#subcategory-ads-articles img{
+    width:100px;
+    height:100px;
+    margin:1px;
+}
+
+#subcategory-ads-articles img:first-of-type{
+  width:200px;
+  height: 200px;
+  grid-column: 1/2;
+  margin-left:1.5em;
+  margin-bottom:1em;
+}
+
+#subcategory-ads-articles table{
+  max-height: 200px;
+  display: grid;
+  grid-template-columns: 1fr ;
+  text-align: justify;
+
+  border-style: solid;
+  border: #831010;
+}
+
+#subcategory-ads-articles thead{
+  grid-column: 1/2Σ;
+  text-align: center;
+}
+
+
+
+
+
 /* Ο τίτλος της ενότητας τοποθετείται στην πάνω γραμμή του grid */
 
 
