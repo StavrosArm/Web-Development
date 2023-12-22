@@ -33,9 +33,7 @@
   margin-bottom:1em;
 }
 
-.ads-articles > article >*{
-  margin: 0%;
-}
+
 
 /*Tα articles με τις αγγελίες περιέχουν ένα footer , με τα χαρακτηριστικά , 
 το βάζουμε ένα margin , για να φαίνεται πιο όμορφο μέσα στο πλαίσιο της αγγελίας*/
@@ -191,7 +189,7 @@ body>img{
     grid-column: auto;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: space-between;
+    column-gap: 2em;
     height:800px;
     border:solid;
     border-radius: 17px;
@@ -201,6 +199,10 @@ body>img{
     border-color: #831010;
     border-width: 0.5px;
     margin-bottom:1em;
+  }
+
+  .ads-articles>article>header{
+    margin-top: 10px;
   }
 
   /*Ορίζουμε το header του article να μην ξεπερνάει τους 20 χαρακτήρες*/

@@ -94,7 +94,7 @@ function handleResult(categories,subcategories, err){
 
 }
 
-function handleCategorySubctergoryResult(ads , err){
+function handleCategoryResult(ads , err){
     if(err !== null){
         console.log(err)
     }
@@ -116,6 +116,33 @@ function handleCategorySubctergoryResult(ads , err){
         console.log("Data not found")
     }
 }
+
+// Συνάρτηση που διαχειρίζεται τις αγγελίες των υποκατηγορίων 
+function handleSubcategoryResult(subcategoryAds,err){
+    if(err !== null){
+        console.log(err)
+    }
+    if (subcategoryAds!== null){
+        //Εμφάνιση των subcategoryAds αντικειμένου για debugging
+        
+        console.log(subcategoryAds)
+
+        let articlesTemplateScript = document.getElementById('adsOfSelectedSubCategory-template').textContent;
+        window.templates = {};
+        window.templates.articlesSection = Handlebars.compile(articlesTemplateScript);
+
+        let articlesSection = document.getElementById("subcategory-ads-articles");
+
+        let sectionHtmlContent =templates.articlesSection({
+            //Εδώ βάζουμε ΄τα ορίσματα για το handlebar
+        });
+        articlesSection.innerHTML = sectionHtmlContent;
+    }else{
+        console.log("Data not found")
+    }
+}
+
+
 let urlString;
 let queryString;
 let params;
@@ -124,8 +151,8 @@ window.addEventListener('load', init);
 
 function init(){
     // Ακολουθεί στα σχόλια ένας τρόπος παραλαβής του url
-    // urlString = window.location.href;
-    // console.log("Url : "+ urlString)
+    urlString = window.location.href;
+    console.log("Url : "+ urlString)
 
     // αρχικοποιήση μιας μεταωβλητης που δέχεται τα query parameteres
     queryString = window.location.search;
@@ -134,12 +161,17 @@ function init(){
     params = new URLSearchParams(queryString);   
     
     // τυπώνουμε το id της κατηγορίας για debugging
-    console.log("category id : "+params.get('id'))  
 
     if (params.size == 0){
         httpGetRequestIndex("https://wiki-ads.onrender.com/categories","https://wiki-ads.onrender.com/subcategories",handleResult)
     }else{
-        httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`,handleCategorySubctergoryResult)
+        if(urlString.includes("subcategory")){
+            console.log("subcategory id : "+params.get('id')) 
+            httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`,handleSubcategoryResult)
+        }else{
+            console.log("category id : "+params.get('id'))  
+            httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`,handleCategoryResult)
+        }
     }
 }
 

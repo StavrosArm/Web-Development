@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="el">
+
+<head>
+  <title>Rent&Buy-Categories</title>
+  <link href="../png/logo-no-background.png" rel="shortcut icon" type="image/png" />
+  <meta charset="UTF-8">
+  <meta name="description" content="Home,Workspace,parking and car rent and buying ">
+  <meta name="keywords" content="Rent, Buy, House, Workspace, Parking , Technology, sports">
+  <meta name="author" content="Iouannou-Armeniakos">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css files/all_files.css">
+  <link rel="stylesheet" href="..\css files\index_house-rentals_car-ads.css">
+  <script src="../js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
+
+   <!-- Handlebars Template -->
+  <script id="adsOfSelectedSubCategory-template" type="text/x-handlebars-template">
+    
+  </script>
+
+</head>
+
+<body>
+  <header>
+
+
+    <nav class="header-navbar">
+      <ul>
+        <li class="brand-logo">
+          <a href="index.html">
+            <img src="../png/logo-no-background.png" alt="Rent&Buy" style="width: 120px;
+                    height: auto">
+          </a>
+        </li>
+        <li class="search-container">
+          <form action="/search" method="get">
+            <input type="search" id="search-bar" name="q" placeholder="Search...">
+            <button type="submit" id="search-button">
+              <img src="../svg/search.svg" alt="Search Icon">
+            </button>
+          </form>
+        </li>
+        <li id="Ads-Categories" class="Show-Sublist">
+          <a class="Border-Radius" href="categories.html" title="Categories ">Κατηγορίες Αγγελιών</a>
+          <ul>
+            <li class="bottom-border-visble"><a href="house-rentals.html" title="Real Estate">Ακίνητα</a></li>
+            <li class="bottom-border-visble"><a href="car-ads.html" title="Vehicles">Οχήματα</a></li>
+            <li class="bottom-border-visble"><a href="#" title="Work">Εργασία</a></li>
+            <li><a href="#" title="Other Categories">Άλλες κατηγορίες</a></li>
+          </ul>
+        </li>
+
+
+
+        <li class="Sign-In " id="sign-in">
+          <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
+        </li>
+
+        <li id="Change-language" class="Show-Sublist">
+          <a class="Border-Radius" href="#" title="EN">EN</a>
+          <ul class="language-sidebar" id="language-sidebar">
+            <li class="bottom-border-visble"><a href="#" title="GR">GR</a></li>
+            <li><a href="#" title="EN-LISt">EN</a></li>
+          </ul>
+        </li>
+
+      </ul>
+
+    </nav>
+
+  </header>
+
+  <main class="main-content">
+    <section id = "subcategory-ads-articles" class="ads-articles">
+      
+    </section>
+  </main>
+
+
+  <footer id="Main-footer">
+    <div id="flex-the-two-first">
+      <div id="upper-footer">
+        <h1 class="brand-logo">
+          <a href="index.html">
+            <img src="../png/logo-no-background.png" alt="Rent&Buy">
+          </a>
+        </h1>
+      </div>
+
+
+      <div id="middle-footer">
+        <ul>
+          <li class="bottom-border-visble">
+            <p><a href="about-us.html" aria-label="About Us">Ποιοί είμαστε</a></p>
+          </li>
+
+          <li class="bottom-border-visble">
+            <p><a href="ContactForm.html">Τεχνική υποστήριξη</a> </p>
+          </li>
+
+          <li>
+            <p><a href="https://european-union.europa.eu/cookies_en">Cookies και πολιτική δεδομένων</a></p>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <!--Tο logo μαζί με το alternative text-->
+
+
+
+    <div id="Right-footer">
+      <!--Den eimai sigouros an einai kalh prakthkh header san paidi enos div-->
+      <div class=".right-footer-header">
+        <img src="../png/index-images/phone-call.png" alt="phone-call-icon">
+        <h1>2106322573</h1>
+        <p>Τηλεφώνησε τώρα από σταθερό ή κινητό και βάλε εύκολα και γρήγορα την αγγελία σου!</p>
+      </div>
+    </div>
+
+    <p>&copy; 2023 Iouannou-Armeniakos. All rights reserved.</p>
+
+
+  </footer>
+
+</body>
+
+</html>
