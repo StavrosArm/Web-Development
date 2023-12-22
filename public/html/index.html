@@ -21,12 +21,12 @@
   {{#each categories}}
     <article>
       <header>
-        <a href="Category.html?id={{this.id}}"><img src="https://wiki-ads.onrender.com/{{this.img_url}}" alt="{{this.title}} picture"></a>
+        <a href="category.html?id={{this.id}}"><img src="https://wiki-ads.onrender.com/{{this.img_url}}" alt="{{this.title}} picture"></a>
         <h1>{{this.title}}</h1>
       </header>
       <ul>
         {{#each this.Subcategories}}
-          <li><a href="Subcategory.hmtl?id={{this.id}}">{{this.title}}</a></li>
+          <li><a href="subcategory.hmtl?id={{this.id}}">{{this.title}}</a></li>
         {{/each}}
       </ul>
     </article>

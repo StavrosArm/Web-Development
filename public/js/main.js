@@ -14,7 +14,7 @@ function handleFetch(url){
 }
 */
 
-function httpGetRequest(url,url1,callback){
+function httpGetRequestIndex(url,url1,callback){
     fetch(url,initObject)
     .then(response => {
         if (!response.ok) {
@@ -42,6 +42,21 @@ function httpGetRequest(url,url1,callback){
 
     
 }
+
+ function httpGetRequestCategorySubcategory(url,callback){
+    fetch(url,initObject)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(ads=>callback(ads,null))
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+ }
+
 
 console.log("The data are :")
 
@@ -71,7 +86,6 @@ function handleResult(categories,subcategories, err){
 
         let sectionHtmlContent =templates.articlesSection({
             categories : categories,
-            url:""
         });
         articlesSection.innerHTML = sectionHtmlContent;
     }else{
@@ -80,8 +94,52 @@ function handleResult(categories,subcategories, err){
 
 }
 
+function handleCategorySubctergoryResult(ads , err){
+    if(err !== null){
+        console.log(err)
+    }
+    if (ads!== null){
+        let articlesTemplateScript = document.getElementById('adsOfSelectedCategory-template').textContent;
+        window.templates = {};
+        window.templates.articlesSection = Handlebars.compile(articlesTemplateScript);
+
+        let articlesSection = document.getElementById("ads-articles");
+
+        console.log(ads)
+
+        let sectionHtmlContent =templates.articlesSection({
+            HeadingStr : "Αποτελέσματα αναζήτησης",
+            ads : ads,
+        });
+        articlesSection.innerHTML = sectionHtmlContent;
+    }else{
+        console.log("Data not found")
+    }
+}
+let urlString;
+let queryString;
+let params;
 window.addEventListener('load', init);
+
+
 function init(){
-    httpGetRequest("https://wiki-ads.onrender.com/categories","https://wiki-ads.onrender.com/subcategories",handleResult)
+    // Ακολουθεί στα σχόλια ένας τρόπος παραλαβής του url
+    // urlString = window.location.href;
+    // console.log("Url : "+ urlString)
+
+    // αρχικοποιήση μιας μεταωβλητης που δέχεται τα query parameteres
+    queryString = window.location.search;
+    
+     // χρησιμοποιούμε την URLSearchParams με σκοπό να μπορούμε να χρησιμοποιήσουμε τα params
+    params = new URLSearchParams(queryString);   
+    
+    // τυπώνουμε το id της κατηγορίας για debugging
+    console.log("category id : "+params.get('id'))  
+
+    if (params.size == 0){
+        httpGetRequestIndex("https://wiki-ads.onrender.com/categories","https://wiki-ads.onrender.com/subcategories",handleResult)
+    }else{
+        httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`,handleCategorySubctergoryResult)
+    }
 }
 
