@@ -20,6 +20,67 @@
     display: none;
 }
 
+.Sign-In form {
+    display: none;
+    width:max-content;
+    height:max-content;
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    margin-top: 0.4em;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 0.5em;
+    
+}
+
+.Sign-In form legend{
+    font-size: larger;
+    font-weight: bold;
+}
+
+.Sign-In fieldset{
+    width:200px;
+    height: max-content;
+    border: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    background-color:white;
+}
+
+.Sign-In input{
+    all:initial;
+    border-style: solid;
+    border-width: 1px;
+    height: 1em;
+    margin-bottom:1em;
+}
+
+.Sign-In label{
+    display:block;
+
+}
+
+.Sign-In:hover form {
+    display: block;
+
+}
+
+
+
+form>.submit-button {
+    background-image: url('../png/sign-in.png'); 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    padding-left: 20px; 
+    border-style: none;
+    
+}
+
+
 
 
 /*Κάνουμε flex κάθε κατηγορία και της ορίζουμε 

@@ -70,6 +70,17 @@
 
         <li class="Sign-In " id="sign-in">
           <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
+          <form action="/submit" method="post" id="registrationForm">
+            <fieldset>
+              <legend>Eγγραφή χρήστη</legend>
+              <label for="username">Όνομα χρήστη: </label>
+              <input type="text" id="username" name="username" pattern="[^\s]+" title="Παρακαλώ εισάγετε μία λέξη"
+                autocomplete="on" required>
+              <label for="password">Κωδικός πρόσβασης: </label>
+              <input type="password" id="password" name="password" required>
+            </fieldset>
+            <input type="submit" value="Σύνδεση" class="submit-button">
+          </form>
         </li>
 
         <li id="Change-language" class="Show-Sublist">

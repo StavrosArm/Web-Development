@@ -59,6 +59,22 @@
 }
 
 
+#sign-in>#registrationForm {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+}
+
+#sign-in>#registrationForm:hover {
+  display: block;
+}
+
+
 
 
 
