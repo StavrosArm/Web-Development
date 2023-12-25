@@ -1,7 +1,8 @@
 const wikiads = 'https://wiki-ads.onrender.com';
-
+const server='http://localhost:8080'
 let myHeaders = new Headers();
 myHeaders.append('Accept', 'application/json')
+
 
 let initObject = {
     method: 'GET',
@@ -161,11 +162,29 @@ function handleSubcategoryResult(subcategoryAds, err) {
 
 function connect_user(event) {
     event.preventDefault();
-    let signData = new FormData(event.target);
 
-    fetch(`${o_server_mas}/submit`, {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    // Get the values entered by the user
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    // Log the values for testing purposes
+    console.log('Username:', username);
+    console.log('Password:', password);
+    
+    const userData={
+        username:username,
+        password:password
+    };
+
+    const jsonUserData=JSON.stringify(userData);
+
+    fetch(`${server}/submit`, {
         method: 'POST',
-        body: signData
+        headers: myHeaders,
+        body: jsonUserData
     })
         .then(res => res.json())
         .then(data => {
