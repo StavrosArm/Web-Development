@@ -3,7 +3,7 @@
 <html lang="el">
 
 <head>
-  <title>Rent&Buy-Categories</title>
+  <title>Rent&Buy-Subcategories</title>
   <link href="../png/logo-no-background.png" rel="shortcut icon" type="image/png" />
   <meta charset="UTF-8">
   <meta name="description" content="Home,Workspace,parking and car rent and buying ">
@@ -15,12 +15,15 @@
   <script src="../js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
 
-   <!-- Handlebars Template -->
+  <!-- Handlebars Template -->
   <script id="adsOfSelectedSubCategory-template" type="text/x-handlebars-template">
         <h2>{{HeadingStr}}</h2>
         {{#each ads}} 
           <article>
             <header>
+              <span class="favoriteButton">
+                <img src='../png/heart.png' alt="add-favourites" id="heart{{this.id}}" >
+              </span>
               <h1>{{this.title}}</h1>
               {{#each this.images}}
               <img src="https://wiki-ads.onrender.com/{{this}}" alt="{{../title}}">
@@ -60,7 +63,7 @@
         <li class="brand-logo">
           <a href="/">
             <img src="../png/logo-no-background.png" alt="Rent&Buy" style="width: 120px;
-                    height: auto">
+                      height: auto">
           </a>
         </li>
         <li class="search-container">
@@ -82,10 +85,23 @@
         </li>
 
 
-
-        <li class="Sign-In " id="sign-in">
-          <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
-        </li>
+        <div id="welcome">
+          <li class="Sign-In " id="sign-in">
+            <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
+            <form action="/submit" method="post" id="registrationForm">
+              <fieldset>
+                <legend>Eγγραφή χρήστη</legend>
+                <label for="username">Όνομα χρήστη: </label>
+                <input type="text" id="username" name="username" pattern="[^\s]+" title="Παρακαλώ εισάγετε μία λέξη"
+                  autocomplete="on" required>
+                <label for="password">Κωδικός πρόσβασης: </label>
+                <input type="password" id="password" name="password" required>
+              </fieldset>
+              <input type="submit" value="Σύνδεση" class="submit-button">
+              <span id="not-registered">Δεν έχετε εγγραφεί ως χρήστης </span>
+            </form>
+          </li>
+        </div>
 
         <li id="Change-language" class="Show-Sublist">
           <a class="Border-Radius" href="#" title="EN">EN</a>
@@ -102,8 +118,7 @@
   </header>
 
   <main class="main-content">
-    <section id = "subcategory-ads-articles" class="ads-articles">
-      
+    <section id="subcategory-ads-articles" class="ads-articles">
     </section>
   </main>
 
@@ -137,12 +152,11 @@
       </div>
     </div>
 
-    <!--Tο logo μαζί με το alternative text-->
+  
 
 
 
     <div id="Right-footer">
-      <!--Den eimai sigouros an einai kalh prakthkh header san paidi enos div-->
       <div class=".right-footer-header">
         <img src="../png/index-images/phone-call.png" alt="phone-call-icon">
         <h1>2106322573</h1>

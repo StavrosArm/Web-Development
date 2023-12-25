@@ -113,6 +113,7 @@ function handleCategoryResult(ads, err) {
             ads: ads,
         });
         articlesSection.innerHTML = sectionHtmlContent;
+        createEventListeners();
     } else {
         console.log("Data not found")
     }
@@ -155,6 +156,7 @@ function handleSubcategoryResult(subcategoryAds, err) {
             HeadingStr: 'Aποτελέσματα αναζήτησης: '
         });
         articlesSection.innerHTML = sectionHtmlContent;
+        createEventListeners();
     } else {
         console.log("Data not found")
     }
@@ -192,8 +194,23 @@ function connect_user(event) {
         .then(res => res.json())
         .then(data => {
             console.log(data)
-            //Eδώ θα κάνουμε την λογική της σύνδεσης.Mόλις γυρίσουν τα δεδομένα ,
-            //προς το παρόν απλώς τα κάνουμε console.log
+            const signIn=document.getElementById('sign-in');
+
+            console.log(data.success);
+            //Ο server μας γυρνάει ένα success ανάλογα με τι έγινε
+            //Άμα είναι true , παίρνει το username , και εμφανίζει κατάλληλο κείμενο 
+            //Καλωσόρισες
+            if (data.success){
+                signIn.style.display='none';
+                
+                const welcome=document.getElementById('welcome')
+                welcome.textContent=`Kαλωσόρισες, ${data.username}!`
+            }
+            //Άμα είναι false , εμφανίζει ένα μήνυμα ότι δεν έχετε εγγραφεί ως χρήστης
+            else{
+                const not_regi=document.getElementById('not-registered');
+                not_regi.style.display = 'block';
+            }
         })
         .catch(err => {
             console.error('Error: ', err);
@@ -201,10 +218,42 @@ function connect_user(event) {
 }
 
 
+//Eίναι το onclick , για τα favorites. μόλις πατάς την καρδιά 
+//αλλάζει σε κόκκινη , και καλεί την συνάρτηση που γράφει στον server ποιά αγγελία 
+//πάτησε.
+function favorites(adId){
+    heartImage=document.getElementById(`${adId}`);
+     
+    console.log(`${adId}`)
+    if (heartImage.src.endsWith('/heart.png')) {
+        heartImage.src = '../png/heart_red.png';
+        //Eδώ θα μπει το fetch και ο έλεγχος για σύνδεση.
+        //sendFavoritesToServer(adId);
+      } else {
+        heartImage.src = '../png/heart.png';
+      }
+
+    
+}
+
+function createEventListeners(){
+        const addFavorites = document.getElementsByClassName('favoriteButton');
+        console.log(addFavorites);
+        console.log(addFavorites.length);
+        const favoriteButtonsArray = Array.from(addFavorites);
+        favoriteButtonsArray.forEach(button => {
+            button.addEventListener('click', function () {
+                const adId = button.querySelector('img').id;
+                favorites(adId);
+            });
+        });    
+}
+
+
 let urlString;
 let queryString;
 let params;
-window.addEventListener('load', init);
+window.addEventListener('DOMContentLoaded', init);
 
 
 function init() {
@@ -234,5 +283,9 @@ function init() {
 
     //Όταν στείλει τα δεδομένα ο χρήστης για σύνδεση , καλούμε την connect user.
     document.getElementById('registrationForm').addEventListener('submit', connect_user);
+
 }
+
+
+
 

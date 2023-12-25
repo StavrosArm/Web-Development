@@ -3,7 +3,7 @@
 <html lang="el">
 
 <head>
-  <title>Rent&Buy-Categories</title>
+  <title>Rent&Buy-Home Page</title>
   <link href="../png/logo-no-background.png" rel="shortcut icon" type="image/png" />
   <meta charset="UTF-8">
   <meta name="description" content="Home,Workspace,parking and car rent and buying ">
@@ -43,7 +43,7 @@
     <nav class="header-navbar">
       <ul>
         <li class="brand-logo">
-          <a href="index.html">
+          <a href="/">
             <img src="../png/logo-no-background.png" alt="Rent&Buy" style="width: 120px;
                     height: auto">
           </a>
@@ -67,7 +67,7 @@
         </li>
 
 
-
+      <div id="welcome">
         <li class="Sign-In " id="sign-in">
           <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
           <form action="/submit" method="post" id="registrationForm">
@@ -80,9 +80,11 @@
               <input type="password" id="password" name="password" required>
             </fieldset>
             <input type="submit" value="Σύνδεση" class="submit-button">
+            <span id="not-registered">Δεν έχετε εγγραφεί ως χρήστης </span>
           </form>
         </li>
-
+      </div>
+        
         <li id="Change-language" class="Show-Sublist">
           <a class="Border-Radius" href="#" title="EN">EN</a>
           <ul class="language-sidebar" id="language-sidebar">
@@ -90,6 +92,7 @@
             <li><a href="#" title="EN-LISt">EN</a></li>
           </ul>
         </li>
+        
 
       </ul>
 

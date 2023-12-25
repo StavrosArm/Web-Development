@@ -11,7 +11,7 @@
   <meta name="author" content="Iouannou-Armeniakos">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css files/all_files.css">
-  <link rel="stylesheet" href="..\css files\index_house-rentals_car-ads.css">
+  <link rel="stylesheet" href="../css files/index_house-rentals_car-ads.css">
   <script src="../js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
 
@@ -21,7 +21,10 @@
     {{#each ads}} 
       <article>
         <header>
-          <h1>{{this.title}}</h1>
+          <span class="favoriteButton">
+            <img src='../png/heart.png' alt="add-favourites" id="heart{{this.id}}" >
+          </span>
+          <h1> {{this.title}}</h1>
           <img src="https://wiki-ads.onrender.com/{{this.images.[0]}}" alt="{{this.title}}">
         </header>
         <h2>Σύντομή περιγραφή και Χαρακτηριστικά</h2>
@@ -65,9 +68,23 @@
 
 
 
-        <li class="Sign-In " id="sign-in">
-          <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
-        </li>
+        <div id="welcome">
+          <li class="Sign-In " id="sign-in">
+            <a class="Border-Radius" href="sign_in.html">Sign/Log in</a>
+            <form action="/submit" method="post" id="registrationForm">
+              <fieldset>
+                <legend>Eγγραφή χρήστη</legend>
+                <label for="username">Όνομα χρήστη: </label>
+                <input type="text" id="username" name="username" pattern="[^\s]+" title="Παρακαλώ εισάγετε μία λέξη"
+                  autocomplete="on" required>
+                <label for="password">Κωδικός πρόσβασης: </label>
+                <input type="password" id="password" name="password" required>
+              </fieldset>
+              <input type="submit" value="Σύνδεση" class="submit-button">
+              <span id="not-registered">Δεν έχετε εγγραφεί ως χρήστης </span>
+            </form>
+          </li>
+        </div>
 
         <li id="Change-language" class="Show-Sublist">
           <a class="Border-Radius" href="#" title="EN">EN</a>
@@ -84,6 +101,7 @@
   </header>
 
   <main class="main-content">
+
     <section id = ads-articles class="ads-articles">
     </section>
   </main>
