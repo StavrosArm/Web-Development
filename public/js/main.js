@@ -1,5 +1,5 @@
 const wikiads = 'https://wiki-ads.onrender.com';
-const server='http://localhost:8080'
+const server = 'http://localhost:8080'
 let myHeaders = new Headers();
 myHeaders.append('Accept', 'application/json')
 
@@ -61,7 +61,7 @@ function httpGetRequestCategorySubcategory(url, callback) {
 
 console.log("The data are :")
 
-// Η μεταβλητή categories είναι οι 4 γενικές κατηγορίες αγγέλιων που προσφέρονται απ΄ό wiki ads και η μεταβλη΄τή 
+// Η μεταβλητή categories είναι οι 4 γενικές κατηγορίες αγγέλιων που προσφέρονται από wiki ads και η μεταβλητή 
 // subcategories παριστάνει ένα array με τις υποκατήγοριες των αγγέλιων
 
 function handleResult(categories, subcategories, err) {
@@ -160,36 +160,40 @@ function handleSubcategoryResult(subcategoryAds, err) {
     }
 }
 
+//H σύνδεση του χρήστη , που γίνεται triggered με submit στην φόρμα.
 function connect_user(event) {
+    //σταματάμε την φόρμα απο την υποβολή 
     event.preventDefault();
 
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
 
-    // Get the values entered by the user
     const username = usernameInput.value;
     const password = passwordInput.value;
 
-    // Log the values for testing purposes
+    //Παίρνουμε τις τιμές και κάνουμε print για λόγους debugging.
     console.log('Username:', username);
     console.log('Password:', password);
-    
-    const userData={
-        username:username,
-        password:password
-    };
 
-    const jsonUserData=JSON.stringify(userData);
+    //Φτιάχνουμε το json και το στέλνουμε στον server.
+    const userData = {
+        username: username,
+        password: password
+    };
+    const jsonUserData = JSON.stringify(userData);
 
     fetch(`${server}/submit`, {
         method: 'POST',
-        headers: myHeaders,
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: jsonUserData
     })
         .then(res => res.json())
         .then(data => {
             console.log(data)
-            //Eδώ θα κάνουμε την λογική της σύνδεσης.
+            //Eδώ θα κάνουμε την λογική της σύνδεσης.Mόλις γυρίσουν τα δεδομένα ,
+            //προς το παρόν απλώς τα κάνουμε console.log
         })
         .catch(err => {
             console.error('Error: ', err);
@@ -228,6 +232,7 @@ function init() {
         }
     }
 
-    document.getElementById('registrationForm').addEventListener('submit',connect_user);
+    //Όταν στείλει τα δεδομένα ο χρήστης για σύνδεση , καλούμε την connect user.
+    document.getElementById('registrationForm').addEventListener('submit', connect_user);
 }
 
