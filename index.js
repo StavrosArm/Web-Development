@@ -56,19 +56,21 @@ app.get('/category.html', function(req, res){
 app.post('/submit', (req, res) => {
 
     const { username, password } = req.body;
-    console.log('Credentials: ',username ,password);
+    console.log('Credentials: ', username, password);
 
-    const user=users.find((u)=>u.username===username&&u.password===password);
-      
-    if (user) {
-      const sessionId = uuid.v4();
-      user.sessionId=sessionId;
+    const user = users.find((u) => u.username === username);
 
-      res.json({ success: true, sessionId ,username });
-    } else {
-      res.status(401).json({ success: false, message: 'Invalid credentials' });
+    if (!user) {
+        res.status(404).send({error:'Δεν υπάρχει εγγεγραμμένος χρήστης, κάντε εγγραφή'})
+    } else if (user.password !== password) {
+        res.status(401).send({error:'Εσφαλμένος κωδικός πρόσβασης'})
     }
-  });
+    else {
+        const sessionId = uuid.v4();
+        user.sessionId = sessionId;
+        res.json({ success: true, sessionId, username });
+    }
+});
 
 
 

@@ -2,18 +2,14 @@ const wikiads = 'https://wiki-ads.onrender.com';
 const server = 'http://localhost:8080'
 let myHeaders = new Headers();
 myHeaders.append('Accept', 'application/json')
-
-
+let urlString;
+let queryString;
+let params;
+window.addEventListener('DOMContentLoaded', init);
 let initObject = {
     method: 'GET',
     headers: myHeaders
 }
-/*
-function handleFetch(url){
-    
-
-}
-*/
 
 function httpGetRequestIndex(url, url1, callback) {
     fetch(url, initObject)
@@ -63,7 +59,6 @@ console.log("The data are :")
 
 // Η μεταβλητή categories είναι οι 4 γενικές κατηγορίες αγγέλιων που προσφέρονται από wiki ads και η μεταβλητή 
 // subcategories παριστάνει ένα array με τις υποκατήγοριες των αγγέλιων
-
 function handleResult(categories, subcategories, err) {
     if (err !== null) {
         console.log(err)
@@ -95,6 +90,8 @@ function handleResult(categories, subcategories, err) {
 
 }
 
+//Eδώ διαχειριζόμαστε τα αποτελέσματα που λαμβάνουμε απο το wikiads , για την κάθε 
+//κατηγορία.
 function handleCategoryResult(ads, err) {
     if (err !== null) {
         console.log(err)
@@ -113,6 +110,8 @@ function handleCategoryResult(ads, err) {
             ads: ads,
         });
         articlesSection.innerHTML = sectionHtmlContent;
+        //Eδώ δημιουργούμε τις καρδιές για τα αγαπημένα , καθώς πρέπει να έχουν ερθει όλες 
+        //Οι αγγελίες για να βάλουμε κουμπί για αγαπημένα.
         createEventListeners();
     } else {
         console.log("Data not found")
@@ -126,7 +125,6 @@ function handleSubcategoryResult(subcategoryAds, err) {
     }
     if (subcategoryAds !== null) {
         //Εμφάνιση των subcategoryAds αντικειμένου για debugging
-
         console.log(subcategoryAds)
         console.log(subcategoryAds.features)
 
@@ -151,11 +149,13 @@ function handleSubcategoryResult(subcategoryAds, err) {
         });
 
         let sectionHtmlContent = templates.articlesSection({
-            //Εδώ βάζουμε ΄τα ορίσματα για το handlebar
+            //Εδώ βάζουμε τα ορίσματα για το handlebar
             ads: subcategoryAds,
             HeadingStr: 'Aποτελέσματα αναζήτησης: '
         });
         articlesSection.innerHTML = sectionHtmlContent;
+        //Eδώ δημιουργούμε τις καρδιές για τα αγαπημένα , καθώς πρέπει να έχουν ερθει όλες 
+        //Οι αγγελίες για να βάλουμε κουμπί για αγαπημένα.
         createEventListeners();
     } else {
         console.log("Data not found")
@@ -163,21 +163,13 @@ function handleSubcategoryResult(subcategoryAds, err) {
 }
 
 //H σύνδεση του χρήστη , που γίνεται triggered με submit στην φόρμα.
+//Στέλνουμε το username και το password , και αναλόγως καλούμε την failedConnection ή
+//succesfulConnection
 function connect_user(event) {
-    //σταματάμε την φόρμα απο την υποβολή 
     event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-
-    //Παίρνουμε τις τιμές και κάνουμε print για λόγους debugging.
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    //Φτιάχνουμε το json και το στέλνουμε στον server.
     const userData = {
         username: username,
         password: password
@@ -191,32 +183,62 @@ function connect_user(event) {
         },
         body: jsonUserData
     })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            const signIn=document.getElementById('sign-in');
-
-            console.log(data.success);
-            //Ο server μας γυρνάει ένα success ανάλογα με τι έγινε
-            //Άμα είναι true , παίρνει το username , και εμφανίζει κατάλληλο κείμενο 
-            //Καλωσόρισες
-            if (data.success){
-                signIn.style.display='none';
-                
-                const welcome=document.getElementById('welcome')
-                welcome.textContent=`Kαλωσόρισες, ${data.username}!`
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(errorData => Promise.reject({ status: res.status, message: errorData.message }));
             }
-            //Άμα είναι false , εμφανίζει ένα μήνυμα ότι δεν έχετε εγγραφεί ως χρήστης
-            else{
-                const not_regi=document.getElementById('not-registered');
-                not_regi.style.display = 'block';
-            }
+            return res.json();
         })
-        .catch(err => {
-            console.error('Error: ', err);
-        })
+        .then(data => succesfulConnection(data))
+        .catch(err => failedConnection(err));
 }
 
+//Aν λάβουμε 200 ΟΚ , εμφανίζουμε καλωσόρισες ${username}
+function succesfulConnection(data) {
+    if (data.success) {
+        console.log(data);
+        const signIn = document.getElementById('sign-in');
+        signIn.style.display = 'none';
+
+        const welcome = document.getElementById('welcome');
+        welcome.textContent = `Καλωσόρισες, ${data.username}!`;
+    } 
+}
+
+//Άμα έχουμε 401 ,σημαίνει ότι ο χρήστης πληκτρολόγησε λάθος κωδικό 
+//(ο χρήστης υπάρχει αλλά δεν ταιριάζει ο κωδικός 
+//που έχει ο σέρβερ) ή άμα έχουμε 404 σημαίνει ότι δεν υπάρχει τέτοιος χρήστης.
+
+function failedConnection(err) {
+    console.error('HTTP Status Code: ', err.status);
+    const errorMessage = document.getElementById('not-registered');
+    errorMessage.style.display='block';
+    if (err.status === 404) {
+        errorMessage.textContent = 'Δεν υπάρχει εγγεγραμμένος χρήστης';
+    } else if (err.status === 401) {
+        errorMessage.textContent = 'Εσφαλμένος κωδικός πρόσβασης';
+    } else {
+        errorMessage.textContent = 'Σφάλμα';
+    }
+}
+
+//Όλα τα κουμπιά που δημιουργούνται δυναμικά με handlebars , ονομάζονται heart1,heart2...heartN 
+//και ανήκουν σε μία κλάση favoriteButton.Μόλις φορτωθούν απο το wikiads , όλες οι αγγελίες 
+//μέσω class name τα παίρνουμε και δημιουργούμε event listeners στις εικόνες , που έχουν 
+//ξεχωριστό id η καθεμία για να γίνεται η εναλλαγή του χρώματος, καθώς και η προσθήκη με βάση 
+//το id της αγγελίας.
+function createEventListeners(){
+        const addFavorites = document.getElementsByClassName('favoriteButton');
+        console.log(addFavorites);
+        console.log(addFavorites.length);
+        const favoriteButtonsArray = Array.from(addFavorites);
+        favoriteButtonsArray.forEach(button => {
+            button.addEventListener('click', function () {
+                const adId = button.querySelector('img').id;
+                favorites(adId);
+            });
+        });    
+}
 
 //Eίναι το onclick , για τα favorites. μόλις πατάς την καρδιά 
 //αλλάζει σε κόκκινη , και καλεί την συνάρτηση που γράφει στον server ποιά αγγελία 
@@ -231,31 +253,10 @@ function favorites(adId){
         //sendFavoritesToServer(adId);
       } else {
         heartImage.src = '../png/heart.png';
-      }
-
-    
+      }  
 }
 
-function createEventListeners(){
-        const addFavorites = document.getElementsByClassName('favoriteButton');
-        console.log(addFavorites);
-        console.log(addFavorites.length);
-        const favoriteButtonsArray = Array.from(addFavorites);
-        favoriteButtonsArray.forEach(button => {
-            button.addEventListener('click', function () {
-                const adId = button.querySelector('img').id;
-                favorites(adId);
-            });
-        });    
-}
-
-
-let urlString;
-let queryString;
-let params;
-window.addEventListener('DOMContentLoaded', init);
-
-
+//Η init μας , που εκτελείται στο onload.
 function init() {
     // Ακολουθεί στα σχόλια ένας τρόπος παραλαβής του url
     urlString = window.location.href;
