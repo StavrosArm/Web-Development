@@ -1,9 +1,10 @@
 const express = require('express')
 const path = require('path');
-const { users } = require('./models/models');
-const uuid = require('uuid');
+const { login } = require('./models/loginService');
+const { updateFavorites } = require('./models/addFavoritesService');
 const app = express()
 const port = 8080
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
@@ -52,25 +53,15 @@ app.get('/category.html', function(req, res){
     })
 })
 
-//Η σύνδεση του χρήστη , με το uuid. 
+//Η σύνδεση του χρήστη ,καλούμε την loginService , η οποία κάνει έλεγχο ,
+//και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
 app.post('/submit', (req, res) => {
-
-    const { username, password } = req.body;
-    console.log('Credentials: ', username, password);
-
-    const user = users.find((u) => u.username === username);
-
-    if (!user) {
-        res.status(404).send({error:'Δεν υπάρχει εγγεγραμμένος χρήστης, κάντε εγγραφή'})
-    } else if (user.password !== password) {
-        res.status(401).send({error:'Εσφαλμένος κωδικός πρόσβασης'})
-    }
-    else {
-        const sessionId = uuid.v4();
-        user.sessionId = sessionId;
-        res.json({ success: true, sessionId, username });
-    }
+    login(req, res);
 });
+
+app.post('/addToFavorites',(req,res)=> {
+    updateFavorites(req,res);
+})
 
 
 

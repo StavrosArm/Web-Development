@@ -17,19 +17,19 @@
 
    <!-- Handlebars Template -->
   <script id="adsOfSelectedCategory-template" type="text/x-handlebars-template">
-    <h2>{{HeadingStr}}</h2>
     {{#each ads}} 
       <article>
         <header>
           <span class="favoriteButton">
             <img src='../png/heart.png' alt="add-favourites" id="heart{{this.id}}" >
+            <div class="errorFavorites" id="error{{this.id}}" ></div>
           </span>
           <h1> {{this.title}}</h1>
           <img src="https://wiki-ads.onrender.com/{{this.images.[0]}}" alt="{{this.title}}">
         </header>
         <h2>Σύντομή περιγραφή και Χαρακτηριστικά</h2>
         <p>{{this.description}}</p>
-        <p>Αρχική τιμή : {{this.cost}}</p>
+        <span>Αρχική τιμή : {{this.cost}}</span>
       </article>
     {{/each}}
   </script>
@@ -101,8 +101,8 @@
   </header>
 
   <main class="main-content">
-
-    <section id = ads-articles class="ads-articles">
+    <h2>Aποτελέσματα Αναζήτησης</h2>
+    <section id = 'ads-articles' class="ads-articles">
     </section>
   </main>
 

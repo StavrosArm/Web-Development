@@ -106,7 +106,6 @@ function handleCategoryResult(ads, err) {
         console.log(ads)
 
         let sectionHtmlContent = templates.articlesSection({
-            HeadingStr: "Αποτελέσματα αναζήτησης",
             ads: ads,
         });
         articlesSection.innerHTML = sectionHtmlContent;
@@ -197,8 +196,24 @@ function connect_user(event) {
 function succesfulConnection(data) {
     if (data.success) {
         console.log(data);
+
+        window.sessionId=data.sessionId;
+        window.username=data.username;
+        
+
+        console.log(window.sessionId);
+
         const signIn = document.getElementById('sign-in');
         signIn.style.display = 'none';
+
+        //Oποιοδήποτε error δημιουργήθηκε όταν πήγαμε να κάνουμε προσθήκη στα 
+        //αγαπημένα χωρίς 
+        //να έχουμε συνδεθεί , το εξαφανίζουμε 
+        const errorFavorites=document.getElementsByClassName('errorFavorites');
+        console.log(errorFavorites);
+        for (let i = 0; i < errorFavorites.length; i++) {
+            errorFavorites[i].textContent = '';
+        }
 
         const welcome = document.getElementById('welcome');
         welcome.textContent = `Καλωσόρισες, ${data.username}!`;
@@ -240,21 +255,81 @@ function createEventListeners(){
         });    
 }
 
-//Eίναι το onclick , για τα favorites. μόλις πατάς την καρδιά 
-//αλλάζει σε κόκκινη , και καλεί την συνάρτηση που γράφει στον server ποιά αγγελία 
-//πάτησε.
+//Εδώ στέλνουμε τα δεδομένα στον server για αποθήκευση.
+//το adId είναι το αντίστοιχο id για κάθε καρδιά που δημιουργήσαμε 
+//To στέλνουμε σε μια συνάρτηση και μας γυρνάει ένα αντικείμενο.
+//Έπειτα κάνουμε fetch στον server , και άμα πληροί τις προύποθέσεις 
+//Ο server κάνει προσθήκη στα αγαπημένα και εμείς εμφανίζουμε καρδιά
+//Αλλιώς εμφανίζουμε σφάλμα για σύνδεση χρήστη , το οποίο θα εξαφανιστεί μόνο αν συνδεθεί κάποιος.
 function favorites(adId){
-    heartImage=document.getElementById(`${adId}`);
-     
-    console.log(`${adId}`)
-    if (heartImage.src.endsWith('/heart.png')) {
-        heartImage.src = '../png/heart_red.png';
-        //Eδώ θα μπει το fetch και ο έλεγχος για σύνδεση.
-        //sendFavoritesToServer(adId);
-      } else {
-        heartImage.src = '../png/heart.png';
-      }  
+    const correspondingAdd = adId.match(/\d+/);
+    console.log(correspondingAdd[0]);
+
+    const data=favoriteArticle(correspondingAdd[0]);
+    const jsonData = JSON.stringify(data);
+
+    fetch('/addToFavorites', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: jsonData,
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                heartImage = document.getElementById(`${adId}`);
+                if (heartImage.src.endsWith('/heart.png')) {
+                    heartImage.src = '../png/heart_red.png';
+                } else {
+                    heartImage.src = '../png/heart.png';
+                }
+            }
+        })
+        .catch(error => {
+            console.log(`error${correspondingAdd}`)
+            let errorMessage=document.getElementById(`error${correspondingAdd}`)
+            errorMessage.textContent='Συνδεθείτε για προσθήκη στα αγαπημένα';
+            
+            console.error('ΗΤΤΡ:', error.message);            
+        });
+    
 }
+
+//Mε βάση ποιά καρδιά πατήθηκε , διαλέγουμε και την αντίστοιχη 
+//αγγελία και δημιουργούμε ένα αντικείμενο με τα χαρακτηριστικά που
+//ζητώνται , τα οποία θα σταλούν στον server.
+function favoriteArticle(index) {
+
+    let section = document.getElementById('ads-articles');
+    const selected = section.querySelector(`article:nth-child(${index})`);
+
+    const id=index;
+    const titleElement=selected.querySelector('header h1');
+    const paragraphElement = selected.querySelector('p');
+    const costElement=selected.querySelector('p+span')
+    const imgElement = selected.querySelector('header>img');
+
+    const data = {
+        id: id,
+        title: titleElement.textContent.trim(),
+        description: paragraphElement.textContent.trim(),
+        cost: costElement.textContent.trim(),
+        imgSrc: imgElement.getAttribute('src').trim(),
+        username:window.username,
+        sessionId:window.sessionId,
+    };
+    
+
+    return data;
+
+}
+
 
 //Η init μας , που εκτελείται στο onload.
 function init() {
@@ -286,6 +361,9 @@ function init() {
     document.getElementById('registrationForm').addEventListener('submit', connect_user);
 
 }
+
+
+
 
 
 
