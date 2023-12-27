@@ -235,9 +235,6 @@ function handleFavorites(data){
             favorites: data.favorites,
         });
         articlesSection.innerHTML = sectionHtmlContent;
-        //Eδώ δημιουργούμε τις καρδιές για τα αγαπημένα , καθώς πρέπει να έχουν ερθει όλες 
-        //Οι αγγελίες για να βάλουμε κουμπί για αγαπημένα.
-        createEventListeners();
     } 
 }
 
