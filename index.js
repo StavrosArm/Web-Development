@@ -53,12 +53,14 @@ app.get('/category.html', function(req, res){
     })
 })
 
+
 //Η σύνδεση του χρήστη ,καλούμε την loginService , η οποία κάνει έλεγχο ,
 //και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
 app.post('/submit', (req, res) => {
     login(req, res);
 });
 
+//Η προσθήκη στα αγαπημένα μέσω της updateFavorites
 app.post('/addToFavorites',(req,res)=> {
     updateFavorites(req,res);
 })

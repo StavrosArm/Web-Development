@@ -1,6 +1,11 @@
 const uuid = require('uuid');
 const {getUser,setSessionId} = require('./users');
 
+//Παίρνουμε το username και το password , και ελέγχουμε τα credentials του χρήστη 
+//Στην περίπτωση που υπάρχει το username , αλλά είναι λάθος το password , στέλνουμε 
+//401 , για unauthorized access . Αντίστοιχα , αν έχουμε λάθος username , στέλνουμε 404 γιατί δεν
+//υπάρχει ο χρήστης. Στην περίπτωση που υπάρχει , του δίνουμε ένα μοναδικό αναγνωριστικό μέσω της uuid
+//Και το στέλνουμε στον client.
 function login(req, res) {
     const{username,password}=req.body;
     console.log('Credentials: ',username , password);

@@ -49,6 +49,8 @@ function getUser(username) {
   return users.find((user) => user.username === username);
 }
 
+
+
 function setSessionId(username, sessionID) {
   let user = users.find((user) => user.username === username);
   user.sessionId = sessionID;
@@ -73,6 +75,6 @@ module.exports = {
   getUser,
   setSessionId,
   validSession,
-  
+ 
 };
 
