@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path');
 const { login } = require('./models/loginService');
 const { updateFavorites } = require('./models/addFavoritesService');
+const {returnFavorites} = require('./models/favoritesRetrievalService');
 const app = express()
 const port = 8080
 
@@ -53,6 +54,25 @@ app.get('/category.html', function(req, res){
     })
 })
 
+app.get('/favorite-ads.html', (req, res) => {
+
+    const options = {
+      root: path.join(__dirname, 'public', 'html')
+    };
+    res.sendFile('favorite-ads.html', options, function (err) {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error sending HTML file');
+      } else {
+        console.log('HTML file sent successfully');
+      }
+    });
+});
+
+app.post('/listOfFavorites',(req,res)=>{
+    returnFavorites(req,res);
+});
+
 
 //Η σύνδεση του χρήστη ,καλούμε την loginService , η οποία κάνει έλεγχο ,
 //και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
@@ -66,6 +86,20 @@ app.post('/addToFavorites',(req,res)=> {
 })
 
 
+app.get('/favorite-ads.html', (req, res) => {
+
+    const options = {
+      root: path.join(__dirname, 'public', 'html')
+    };
+    res.sendFile('favorite-ads.html', options, function (err) {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error sending HTML file');
+      } else {
+        console.log('HTML file sent successfully');
+      }
+    });
+  });
 
 
 

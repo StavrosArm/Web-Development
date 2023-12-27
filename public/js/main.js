@@ -192,6 +192,55 @@ function connect_user(event) {
         .catch(err => failedConnection(err));
 }
 
+function httpGetFavoriteForUser(UserSession){
+
+    let jsonUserSession=JSON.stringify(UserSession);
+
+    fetch(`${server}/listOfFavorites`,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            
+        },
+        body:jsonUserSession
+    })
+    .then(res=>{
+        if(!res.ok){
+            throw new Error(`HTTP error: ${res.status}`);
+        }
+        return res.json()
+    })
+    .then(data=>handleFavorites(data))
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+}
+
+function handleFavorites(data){
+    console.log(data.favorites);
+    if (!data.success) {
+        console.log('Δεν βρέθηκαν τα δεδομένα.')
+    }else{
+        let header2=document.querySelector('.main-content>h2');
+        header2.textContent=`Aγαπημένες αγγελίες του χρήστη ${data.username}`
+        let favorites_template = document.getElementById('favorites-template').textContent;
+        window.templates = {};
+        window.templates.articlesSection = Handlebars.compile(favorites_template);
+
+        let articlesSection = document.getElementById("ads-articles");
+
+        
+
+        let sectionHtmlContent = templates.articlesSection({
+            favorites: data.favorites,
+        });
+        articlesSection.innerHTML = sectionHtmlContent;
+        //Eδώ δημιουργούμε τις καρδιές για τα αγαπημένα , καθώς πρέπει να έχουν ερθει όλες 
+        //Οι αγγελίες για να βάλουμε κουμπί για αγαπημένα.
+        createEventListeners();
+    } 
+}
+
 //Aν λάβουμε 200 ΟΚ , εμφανίζουμε καλωσόρισες ${username}
 function succesfulConnection(data) {
     if (data.success) {
@@ -200,6 +249,8 @@ function succesfulConnection(data) {
         window.sessionId=data.sessionId;
         window.username=data.username;
         
+        let myLink=document.getElementById('fav');
+        myLink.href=`favorite-ads.html?username=${window.username}&sessionId=${window.sessionId}`
 
         console.log(window.sessionId);
 
@@ -306,8 +357,10 @@ function favorites(adId){
 //ζητώνται , τα οποία θα σταλούν στον server.
 function favoriteArticle(index) {
 
+
+    
     let section = document.getElementById('ads-articles');
-    const selected = section.querySelector(`article:nth-child(${index})`);
+    const selected = document.getElementById(index);
 
     const id=index;
     const titleElement=selected.querySelector('header h1');
@@ -325,7 +378,7 @@ function favoriteArticle(index) {
         sessionId:window.sessionId,
     };
     
-
+    console.log(data);
     return data;
 
 }
@@ -347,7 +400,7 @@ function init() {
 
     if (params.size == 0) {
         httpGetRequestIndex("https://wiki-ads.onrender.com/categories", "https://wiki-ads.onrender.com/subcategories", handleResult)
-    } else {
+    } else if((urlString.includes("subcategory"))||(urlString.includes("category"))) {
         if (urlString.includes("subcategory")) {
             console.log("subcategory id : " + params.get('id'))
             httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`, handleSubcategoryResult)
@@ -356,6 +409,13 @@ function init() {
             httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`, handleCategoryResult)
         }
     }
+    else{
+        console.log('username ',params.get('username'),' session id' ,params.get('sessionId'));
+        let UserSession={username:params.get('username'),sessionId:params.get('sessionId')}
+        console.log(UserSession);
+        httpGetFavoriteForUser(UserSession);
+    }
+
 
     //Όταν στείλει τα δεδομένα ο χρήστης για σύνδεση , καλούμε την connect user.
     document.getElementById('registrationForm').addEventListener('submit', connect_user);
