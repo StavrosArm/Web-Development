@@ -24,7 +24,7 @@ function updateFavorites(req, res, client, flag) {
     return res.status(400).json({ error: 'H σύνδεση έληξε' });
   }
 
-  const NewFavoritesData = removeSessionAndUsername(data);
+  const NewFavoritesData = removeSessionAndUsername(data );
 
 
   const user = UserDAO.getUser(username);
@@ -34,7 +34,7 @@ function updateFavorites(req, res, client, flag) {
     if (!user.favorites.some(favorite => favorite.id === NewFavoritesData.id)) {
       user.favorites.push(NewFavoritesData);
       UserDAO.updateUserFavorites(username, user.favorites);
-      
+
       userFROMdao = UserDAO.getUser(username);
       console.log(userFROMdao.favorites, ` Οι αγαπημένες αγγελίες του χρήστη  ${user.username}`)
     }
