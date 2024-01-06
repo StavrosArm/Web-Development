@@ -6,7 +6,8 @@ const {returnFavorites,returnFavoritesMongo} = require('./models/favoritesRetrie
 const app = express()
 const port = 8080
 const { MongoClient, ServerApiVersion} = require('mongodb');
-const uri ='mongodb+srv://Armeniakos:eMJ72HGy2YGVGfVB@cluster0.reulvjm.mongodb.net/?retryWrites=true&w=majority'
+require('dotenv').config();
+const uri =process.env.MONGODB_URI;
 const readline = require('readline');
 
 
@@ -123,13 +124,14 @@ app.post('/listOfFavorites',(req,res)=>{
 //και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
 app.post('/submit', (req, res) => {
 
-  if(userInput==1){
+ if(userInput==0){
+  login(req, res, client ,userInput);
+  }
+  else{
     loginMongo(req,res,client);
   }
-  else
-  {
-    login(req, res);
-  }
+    
+  
   
 });
 

@@ -14,42 +14,43 @@ function removeSessionAndUsername(obj) {
 //Στην περίπτωση που αντιστοιχεί , κάνουμε έλεγχο ότι δεν υπάρχει ήδη η αγγελία και προχωράμε 
 //στην προσθήκη της , στέλνοντας κατάλληλη απόκριση.
 
-function updateFavorites(req,res){
-    const data=req.body;
-    
-    const sessionID = data.sessionId;
-    const username=data.username;
+function updateFavorites(req, res, client, flag) {
+  const data = req.body;
 
-    if (!username || !sessionID) {
-        return res.status(400).json({ error: 'H σύνδεση έληξε' });
+  const sessionID = data.sessionId;
+  const username = data.username;
+
+  if (!username || !sessionID) {
+    return res.status(400).json({ error: 'H σύνδεση έληξε' });
+  }
+
+  const NewFavoritesData = removeSessionAndUsername(data);
+
+
+  const user = UserDAO.getUser(username);
+
+  if (SessionDAO.validSession(username, sessionID)) {
+
+    if (!user.favorites.some(favorite => favorite.id === NewFavoritesData.id)) {
+      user.favorites.push(NewFavoritesData);
+      UserDAO.updateUserFavorites(username, user.favorites);
+      
+      userFROMdao = UserDAO.getUser(username);
+      console.log(userFROMdao.favorites, ` Οι αγαπημένες αγγελίες του χρήστη  ${user.username}`)
     }
-
-    const NewFavoritesData=removeSessionAndUsername(data);
-    const user=UserDAO.getUser(username);
-
-    if(SessionDAO.validSession(username, sessionID)){
-        
-        if(!user.favorites.some(favorite => favorite.id === NewFavoritesData.id)){
-            user.favorites.push(NewFavoritesData);
-            UserDAO.updateUserFavorites(username, user.favorites);
-
-            userFROMdao=UserDAO.getUser(username);
-            console.log(userFROMdao.favorites, ` Οι αγαπημένες αγγελίες του χρήστη me DAO ${user.username}`)
-        }
-        else
-        {
-            console.log('Υπάρχει ήδη στα αγαπημένα')
-        }
-    
-        
-        
-        res.status(200).json({ success: true, message: 'OK' });
-
+    else {
+      console.log('Υπάρχει ήδη στα αγαπημένα')
     }
-    else
-    {
-        res.status(401).send({error:'Συνδεθείτε για προσθήκη αγαπημένων'})
-    }
+    res.status(200).json({ success: true, message: 'OK' });
+
+  }
+  else {
+    res.status(401).send({ error: 'Συνδεθείτε για προσθήκη αγαπημένων' })
+  }
+
+
+
+
 
 }
 

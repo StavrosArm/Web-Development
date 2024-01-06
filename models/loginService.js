@@ -8,22 +8,25 @@ const SessionDAO = require('./sessionDAO');
 //401 , για unauthorized access . Αντίστοιχα , αν έχουμε λάθος username , στέλνουμε 404 γιατί δεν
 //υπάρχει ο χρήστης. Στην περίπτωση που υπάρχει , του δίνουμε ένα μοναδικό αναγνωριστικό μέσω της uuid
 //Και το στέλνουμε στον client.
-function login(req, res) {
+function login(req, res ,client,flag) {
     const{username,password}=req.body;
     console.log('Credentials: ',username , password);
-    const user = UserDAO.getUser(username);
 
-    if (!user) {
+ 
+    const userVer = UserDAO.getUser(username);
+    
+    if (!userVer) {
         res.status(404).send({error:'Δεν υπάρχει εγγεγραμμένος χρήστης, κάντε εγγραφή'})
-    } else if (user.password !== password) {
+    } else if (userVer.password !== password) {
         res.status(401).send({error:'Εσφαλμένος κωδικός πρόσβασης'})
     }
     else {
         const sessionId = uuid.v4();
-        SessionDAO.setSessionId(user.username,sessionId);
-        console.log(user.sessionId);
+        SessionDAO.setSessionId(userVer.username,sessionId);
+        console.log(userVer.sessionId);
         res.json({ success: true, sessionId, username });
     }
+
 }
 
 function loginMongo(req, res, client) {
