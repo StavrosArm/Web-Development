@@ -354,8 +354,6 @@ function favorites(adId){
 //ζητώνται , τα οποία θα σταλούν στον server.
 function favoriteArticle(index) {
 
-
-    
     let section = document.getElementById('ads-articles');
     const selected = document.getElementById(index);
 

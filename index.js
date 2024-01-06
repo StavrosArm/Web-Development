@@ -1,11 +1,51 @@
 const express = require('express')
 const path = require('path');
-const { login } = require('./models/loginService');
-const { updateFavorites } = require('./models/addFavoritesService');
-const {returnFavorites} = require('./models/favoritesRetrievalService');
+const { login, loginMongo } = require('./models/loginService');
+const { updateFavorites, updateFavoritesMongo } = require('./models/addFavoritesService');
+const {returnFavorites,returnFavoritesMongo} = require('./models/favoritesRetrievalService');
 const app = express()
 const port = 8080
+const { MongoClient, ServerApiVersion} = require('mongodb');
+const uri ='mongodb+srv://Armeniakos:eMJ72HGy2YGVGfVB@cluster0.reulvjm.mongodb.net/?retryWrites=true&w=majority'
+const readline = require('readline');
 
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+let userInput;
+rl.question('Θέλετε να τρέξει με  MongoDB , γράψτε 1 για ναι , 0 για όχι: ', (answer) => {
+  userInput = answer;
+  rl.close();
+});
+
+
+//O κώδικας που ακολουθεί μέχρι το run είναι απο το Atlas για σύνδεση με την βάση 
+//Που δίνεται στο connect.
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  }catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
+}
+
+if(userInput===1){
+  run().catch(console.dir);
+}
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
@@ -70,19 +110,39 @@ app.get('/favorite-ads.html', (req, res) => {
 });
 
 app.post('/listOfFavorites',(req,res)=>{
+
+  if (userInput==1){
+    returnFavoritesMongo(req,res,client);
+  }else{
     returnFavorites(req,res);
+  }
 });
 
 
 //Η σύνδεση του χρήστη ,καλούμε την loginService , η οποία κάνει έλεγχο ,
 //και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
 app.post('/submit', (req, res) => {
+
+  if(userInput==1){
+    loginMongo(req,res,client);
+  }
+  else
+  {
     login(req, res);
+  }
+  
 });
 
 //Η προσθήκη στα αγαπημένα μέσω της updateFavorites
 app.post('/addToFavorites',(req,res)=> {
+  if(userInput==1){
+    updateFavoritesMongo(req,res,client);
+  }
+  else
+  {
     updateFavorites(req,res);
+  }
+
 })
 
 
@@ -99,8 +159,9 @@ app.get('/favorite-ads.html', (req, res) => {
         console.log('HTML file sent successfully');
       }
     });
+
   });
 
 
-
+ 
 
