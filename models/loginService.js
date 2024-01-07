@@ -21,8 +21,7 @@ function login(req, res ,client,flag) {
         res.status(401).send({error:'Εσφαλμένος κωδικός πρόσβασης'})
     }
     else {
-        const sessionId = uuid.v4();
-        SessionDAO.setSessionId(userVer.username,sessionId);
+        const sessionId=SessionDAO.setSessionId(userVer.username,sessionId);
         console.log(userVer.sessionId);
         res.json({ success: true, sessionId, username });
     }

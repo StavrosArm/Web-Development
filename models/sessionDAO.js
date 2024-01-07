@@ -15,8 +15,12 @@ class SessionDAO {
     return this.sessions[username];
   }
 
-  validSession(username) {
-    return this.sessions.hasOwnProperty(username);
+  validSession(username,sessionID) {
+      if(this.sessions.hasOwnProperty(username)){
+         return sessions[username]==sessionID;
+      }else{
+        return false;
+      }
     }
     
   updateSessionId(username, newSessionId) {
