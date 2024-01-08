@@ -24,7 +24,7 @@ function updateFavorites(req, res, client, flag) {
     return res.status(400).json({ error: 'H σύνδεση έληξε' });
   }
 
-  const NewFavoritesData = removeSessionAndUsername(data );
+  const NewFavoritesData = removeSessionAndUsername(data);
 
 
   const user = UserDAO.getUser(username);

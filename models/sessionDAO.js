@@ -17,7 +17,7 @@ class SessionDAO {
 
   validSession(username,sessionID) {
       if(this.sessions.hasOwnProperty(username)){
-         return sessions[username]==sessionID;
+         return this.sessions[username]==sessionID;
       }else{
         return false;
       }

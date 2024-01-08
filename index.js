@@ -3,6 +3,8 @@ const path = require('path');
 const { login, loginMongo } = require('./models/loginService');
 const { updateFavorites, updateFavoritesMongo } = require('./models/addFavoritesService');
 const {returnFavorites,returnFavoritesMongo} = require('./models/favoritesRetrievalService');
+// const users = require('./models/userDAO.js')
+// users.addUsers();
 const app = express()
 const port = 8080
 const { MongoClient, ServerApiVersion} = require('mongodb');

@@ -14,15 +14,18 @@ function login(req, res ,client,flag) {
 
  
     const userVer = UserDAO.getUser(username);
-    
+
+    // console.log(userVer);
+
     if (!userVer) {
         res.status(404).send({error:'Δεν υπάρχει εγγεγραμμένος χρήστης, κάντε εγγραφή'})
     } else if (userVer.password !== password) {
         res.status(401).send({error:'Εσφαλμένος κωδικός πρόσβασης'})
     }
     else {
-        const sessionId=SessionDAO.setSessionId(userVer.username,sessionId);
-        console.log(userVer.sessionId);
+        const sessionId=SessionDAO.setSessionId(userVer.username);
+        // console.log(sessionId);
+        // console.log(username);
         res.json({ success: true, sessionId, username });
     }
 

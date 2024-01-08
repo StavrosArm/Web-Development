@@ -40,7 +40,35 @@ function httpGetRequestIndex(url, url1, callback) {
 
 }
 
-function httpGetRequestCategorySubcategory(url, callback) {
+function httpGetRequestCategory(url,url1, callback) {
+    fetch(url, initObject)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(ads => {
+            fetch(url1, initObject)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(subcategories => callback(ads, subcategories, null))
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+        })
+        // .then(ads => callback(ads, null))
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+}
+
+function httpGetRequestSubcategory(url, callback) {
     fetch(url, initObject)
         .then(response => {
             if (!response.ok) {
@@ -92,7 +120,9 @@ function handleResult(categories, subcategories, err) {
 
 //Eδώ διαχειριζόμαστε τα αποτελέσματα που λαμβάνουμε απο το wikiads , για την κάθε 
 //κατηγορία.
-function handleCategoryResult(ads, err) {
+function handleCategoryResult(ads,subcategories, err) {
+
+    console.log(ads ,"/n",subcategories);
     if (err !== null) {
         console.log(err)
     }
@@ -184,7 +214,7 @@ function connect_user(event) {
     })
         .then(res => {
             if (!res.ok) {
-                return res.json().then(errorData => Promise.reject({ status: res.status, message: errorData.message }));
+                return res.json().then(errorData =>Promise.reject({ status: res.status, message: errorData.message }));
             }
             return res.json();
         })
@@ -241,7 +271,8 @@ function handleFavorites(data){
 //Aν λάβουμε 200 ΟΚ , εμφανίζουμε καλωσόρισες ${username}
 function succesfulConnection(data) {
     if (data.success) {
-        console.log(data);
+
+        // console.log(`Data of the Connection Post request are : ${data.success}//${data.sessionId}//${data.username}`)
 
         window.sessionId=data.sessionId;
         window.username=data.username;
@@ -249,7 +280,7 @@ function succesfulConnection(data) {
         let myLink=document.getElementById('fav');
         myLink.href=`favorite-ads.html?username=${window.username}&sessionId=${window.sessionId}`
 
-        console.log(window.sessionId);
+        // console.log(window.sessionId);
 
         const signIn = document.getElementById('sign-in');
         signIn.style.display = 'none';
@@ -398,10 +429,10 @@ function init() {
     } else if((urlString.includes("subcategory"))||(urlString.includes("category"))) {
         if (urlString.includes("subcategory")) {
             console.log("subcategory id : " + params.get('id'))
-            httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`, handleSubcategoryResult)
+            httpGetRequestSubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`, handleSubcategoryResult)
         } else {
             console.log("category id : " + params.get('id'))
-            httpGetRequestCategorySubcategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`, handleCategoryResult)
+            httpGetRequestCategory(`https://wiki-ads.onrender.com/ads?category=${params.get('id')}`,"https://wiki-ads.onrender.com/subcategories", handleCategoryResult)
         }
     }
     else{
