@@ -18,7 +18,7 @@
    <!-- Handlebars Template -->
   <script id="adsOfSelectedCategory-template" type="text/x-handlebars-template">
     {{#each ads}} 
-      <article id="{{this.id}}">
+      <article id="{{this.id}}" class="subcategory{{this.subcategory_id}}">
         <header>
           <span class="favoriteButton">
             <img src='../png/heart.png' alt="add-favourites" id="heart{{this.id}}" >
@@ -32,6 +32,20 @@
         <span>Αρχική τιμή : {{this.cost}}</span>
       </article>
     {{/each}}
+  </script>
+
+  <script id="filter-template" type="text/x-handlebars-template">
+    <h2>&#9776; Συχνές Κατηγορίες</h2>
+    <ul class="menu">
+      <li>
+          <ul>
+            <li id="all-subs" class="menu-items">Όλες οι υποκατηγορίες</li>
+            {{#each subcategory}}
+            <li id="subcategory{{this.id}}" class="menu-items">{{this.title}}</li>
+            {{/each}}
+          </ul>
+      </li>
+    </ul>
   </script>
 
 </head>
@@ -100,6 +114,10 @@
 
   </header>
 
+  
+  <aside id="filter"></aside>
+  
+
   <main class="main-content">
     <h2>Aποτελέσματα Αναζήτησης</h2>
     <a id="fav" href="#">Aγαπημένες αγγελίες </a>
@@ -158,3 +176,4 @@
 </body>
 
 </html>
+

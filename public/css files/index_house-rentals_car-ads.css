@@ -293,7 +293,7 @@ parts της εργασίας.*/
     /*Εδώ πέρα επαναφέρουμε το aside , να εμφανίζεται στην οθόνη , και να μην είναι "κρυμμένο",
     του δίνουμε να πιάσει τις στήλες 10/13 του grid καθώς και του προσαρμόζουμε το ύψος και κάποια 
     margins.*/
-    aside{
+    #filter{
       all:initial;
       grid-column:10/13;
       width:90%;
@@ -303,7 +303,7 @@ parts της εργασίας.*/
     }
 
     /*Mικρές προσαρμογές για το aside στο επίπεδο desktop*/
-    aside>h2{
+    #filter>h2{
       display:block;
       margin:0;
     }
@@ -312,12 +312,15 @@ parts της εργασίας.*/
       display: none;
     }
    
-    aside li{
+    #filter li{
+      all:initial;
+      display:block;
+      margin:0.5em;
       border-bottom:#831010;
     }
 
     /*Eπαναφορά των κανόνων για το aside*/
-    #menu ul {
+    #filter ul {
       all:initial;
     }
 

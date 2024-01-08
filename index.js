@@ -126,11 +126,12 @@ app.post('/listOfFavorites',(req,res)=>{
 //και γυρνάει εκείνη τα κατάλληλα μηνύματα. 
 app.post('/submit', (req, res) => {
 
- if(userInput==0){
-  login(req, res, client ,userInput);
+ if(userInput==1){
+  loginMongo(req,res,client);
   }
-  else{
-    loginMongo(req,res,client);
+  else
+  {
+    login(req, res, client ,userInput);
   }
     
   

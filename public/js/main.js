@@ -126,10 +126,16 @@ function handleCategoryResult(ads,subcategories, err) {
     if (err !== null) {
         console.log(err)
     }
+
     if (ads !== null) {
         let articlesTemplateScript = document.getElementById('adsOfSelectedCategory-template').textContent;
         window.templates = {};
         window.templates.articlesSection = Handlebars.compile(articlesTemplateScript);
+
+        let filterTemplateScript=document.getElementById('filter-template').textContent;
+        window.templates.filterSection=Handlebars.compile(filterTemplateScript);
+
+        let filterSection=document.getElementById('filter');
 
         let articlesSection = document.getElementById("ads-articles");
 
@@ -139,12 +145,71 @@ function handleCategoryResult(ads,subcategories, err) {
             ads: ads,
         });
         articlesSection.innerHTML = sectionHtmlContent;
+
+        queryString = window.location.search;
+        params = new URLSearchParams(queryString);
+        category_id=params.get('id');
+        
+        aside_subcategories=[];
+        subcategories.forEach(function(subcategory){
+            if(subcategory.category_id==category_id){
+                aside_subcategories.push(subcategory)
+            }
+        })
+
+        let sectionHtmlContent2=templates.filterSection({
+            subcategory:aside_subcategories,
+        })
+        filterSection.innerHTML=sectionHtmlContent2;
         //Eδώ δημιουργούμε τις καρδιές για τα αγαπημένα , καθώς πρέπει να έχουν ερθει όλες 
         //Οι αγγελίες για να βάλουμε κουμπί για αγαπημένα.
+        filterEventListeners();
         createEventListeners();
+        
     } else {
         console.log("Data not found")
     }
+}
+
+//To φίλτρο για τις υποκατηγορίες 
+function filterEventListeners(){
+    const filtering=document.getElementsByClassName('menu-items');
+    const filterButtonsArray = Array.from(filtering);
+    console.log(filterButtonsArray);
+    filterButtonsArray.forEach(button => {
+        button.addEventListener('click', function () {
+            const menuId = button.id;
+            console.log(button.id);
+            filter(menuId);
+            
+        });
+        
+    });  
+}
+
+//H filter για το φιτράρισμα με βάση την υποκατηγορία
+function filter(menuId){
+    const articles=document.getElementsByTagName('article')
+    console.log(articles);
+    const articles_array=Array.from(articles);
+    if(menuId!=='all-subs'){
+        articles_array.forEach(function(article){
+            if(article.className!==menuId)
+            {
+                article.style.display='none'
+            }
+            else
+            {
+                article.style.display='block';
+            }
+    
+        })
+    }else{
+        articles_array.forEach(article=>{
+            article.style.display='block'
+        })
+    }
+
 }
 
 // Συνάρτηση που διαχειρίζεται τις αγγελίες των υποκατηγορίων 
