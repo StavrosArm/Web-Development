@@ -252,6 +252,34 @@ body>img{
     border-color: #831010;
     border-width: 0.5px;
     margin-bottom:1em;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  article > table{
+    border-collapse: collapse; 
+    border-spacing: 0; 
+    width: 100%;
+    border: 1px solid white;
+  }
+  article thead{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    
+  }
+  article th , article td {
+    text-align: center;
+    padding: 8px;
+  }
+
+  article tr:nth-child(even){background-color: #f2f2f2}
+  
+  .responsive-table>table>tbody>tr{
+    width: 522px;
+  }
+  .responsive-table{
+    overflow-y:auto;
   }
 
   .ads-articles>article>header{

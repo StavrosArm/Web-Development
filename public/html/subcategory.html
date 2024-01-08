@@ -31,21 +31,23 @@
             </header>
             <h2>Σύντομή περιγραφή</h2>
             <p>{{this.description}}</p>
-            <table>
-              <thead>
-                <tr>
-                  <th colspan="2">Xαρακτηριστικά Αγγελίας</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each this.features}}
-                <tr>
-                    <td>{{@key}}</td>
-                    <td>{{this}}</td> 
-                </tr>
-                {{/each}}
-              </tbody>
-            </table>
+            <div class = "responsive-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th colspan="2">Xαρακτηριστικά Αγγελίας</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each this.features}}
+                  <tr>
+                      <td>{{@key}}</td>
+                      <td>{{this}}</td> 
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
             <span>Αρχική τιμή : {{this.cost}} € </span>
           </article>
         {{/each}}
